@@ -10,6 +10,19 @@ const bcrypt = require("bcryptjs");
  * @param {String} id
  * @returns {Promise<User>}
  */
+async function getUserById(id) {
+    try {
+        const user = await User.findById(id);
+        if (!user) {
+            throw new ApiError(httpStatus.BAD_REQUEST, "\"\"userId\"\" must be a valid mongo id")
+        }
+        return user;
+    } catch (error) {
+        throw error;
+    }
+}
+
+
 
 // TODO: CRIO_TASK_MODULE_UNDERSTANDING_BASICS - Implement getUserByEmail(email)
 /**
@@ -18,6 +31,19 @@ const bcrypt = require("bcryptjs");
  * @param {string} email
  * @returns {Promise<User>}
  */
+async function getUserByEmail(email) {
+    try {
+        const user = await User.findOne(email);
+        if (!user) {
+            throw new ApiError(httpStatus.BAD_REQUEST, "\"\"userId\"\" must be a valid mongo id")
+        }
+        return user;
+    } catch (error) {
+        throw error;
+    }
+}
+
+
 
 // TODO: CRIO_TASK_MODULE_UNDERSTANDING_BASICS - Implement createUser(user)
 /**
@@ -41,5 +67,26 @@ const bcrypt = require("bcryptjs");
  *
  * 200 status code on duplicate email - https://stackoverflow.com/a/53144807
  */
+
+async function createUser(user) {
+    try {
+        console.log(user);
+        const isExist = await User.isEmailTaken(user);
+        if (isExist) {
+            throw new ApiError(200, "Email already taken");
+        }
+        const newUser = User.create(user);
+        return newUser;
+    } catch (error) {
+        throw error;
+    }
+
+}
+
+module.exports = {
+    getUserByEmail,
+    getUserById,
+    createUser
+}
 
 
