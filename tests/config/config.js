@@ -15,6 +15,10 @@ const envVarsSchema = Joi.object()
       .required(),
     PORT: Joi.number().default(3000),
     MONGODB_URL: Joi.string().required().description("Mongo DB url"),
+    JWT_SECRET: Joi.string().required().description("JWT secret key"),
+    JWT_ACCESS_EXPIRATION_MINUTES: Joi.number()
+      .default(30)
+      .description("minutes after which access tokens expire"),
   })
   .unknown();
 
@@ -41,4 +45,8 @@ module.exports = {
   default_wallet_money: DEFAULT_WALLET_MONEY,
   default_payment_option: DEFAULT_PAYMENT_OPTION,
   default_address: DEFAULT_ADDRESSS,
+  jwt: {
+    secret: envVars.JWT_SECRET,
+    accessExpirationMinutes: envVars.JWT_ACCESS_EXPIRATION_MINUTES,
+  },
 };
