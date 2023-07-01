@@ -20,6 +20,7 @@ app.use(express.json());
 // parse urlencoded request body
 app.use(express.urlencoded({ extended: true }));
 
+
 // gzip compression
 app.use(compression());
 
@@ -27,6 +28,9 @@ app.use(compression());
 app.use(cors());
 app.options("*", cors());
 
+//passport configuration
+app.use(passport.initialize());
+passport.use('jwt', jwtStrategy)
 
 // Reroute all API request starting with "/v1" route
 app.use("/v1", routes);

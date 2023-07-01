@@ -2,6 +2,7 @@ const { User } = require("../models");
 const httpStatus = require("http-status");
 const ApiError = require("../utils/ApiError");
 const bcrypt = require("bcryptjs");
+const {generateAuthTokens} = require('./token.service')
 
 // TODO: CRIO_TASK_MODULE_UNDERSTANDING_BASICS - Implement getUserById(id)
 /**
@@ -14,7 +15,7 @@ async function getUserById(id) {
     try {
         const user = await User.findById(id);
         if (!user) {
-            throw new ApiError(httpStatus.BAD_REQUEST, "\"\"userId\"\" must be a valid mongo id")
+            throw new ApiError(httpStatus.BAD_REQUEST, "User not found")
         }
         return user;
     } catch (error) {
@@ -33,10 +34,7 @@ async function getUserById(id) {
  */
 async function getUserByEmail(email) {
     try {
-        const user = await User.findOne(email);
-        if (!user) {
-            throw new ApiError(httpStatus.BAD_REQUEST, "\"\"userId\"\" must be a valid mongo id")
-        }
+        const user = await User.findOne({email});
         return user;
     } catch (error) {
         throw error;
@@ -69,18 +67,12 @@ async function getUserByEmail(email) {
  */
 
 async function createUser(user) {
-    try {
-        console.log(user);
-        const isExist = await User.isEmailTaken(user);
+        const isExist = await User.isEmailTaken(user.email);
         if (isExist) {
-            throw new ApiError(200, "Email already taken");
+            throw new ApiError(httpStatus.OK, "Email already taken");
         }
-        const newUser = User.create(user);
-        return newUser;
-    } catch (error) {
-        throw error;
-    }
-
+        const newUser = await User.create(user);     
+        return newUser;  
 }
 
 module.exports = {

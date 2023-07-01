@@ -1,7 +1,7 @@
 const { Strategy: JwtStrategy, ExtractJwt } = require("passport-jwt");
 const config = require("./config");
 const { tokenTypes } = require("./tokens");
-const { User } = require("../models");
+const {userService} = require('../services' )
 
 // TODO: CRIO_TASK_MODULE_AUTH - Set mechanism to retrieve Jwt token from user request
 /**
@@ -10,6 +10,7 @@ const { User } = require("../models");
  * Option 2: mechanism to fetch jwt token from request Authentication header with the "bearer" auth scheme
  */
 const jwtOptions = {
+  jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
   secretOrKey: config.jwt.secret,
 };
 
@@ -26,11 +27,24 @@ const jwtOptions = {
  * @param done - callback function
  */
 const jwtVerify = async (payload, done) => {
+  try {
+    if(payload.type != tokenTypes.ACCESS){
+      done(new Error("Invalid token type"), false);
+    }
+    const user = await userService.getUserById(payload.sub);
+    if(!user){
+      return done(null, false);
+    }
+
+    done(null, user);
+  } catch (error) {
+    done(error, false);
+  }
 };
 
 // TODO: CRIO_TASK_MODULE_AUTH - Uncomment below lines of code once the "jwtVerify" and "jwtOptions" are implemented
-// const jwtStrategy = new JwtStrategy(jwtOptions, jwtVerify);
+const jwtStrategy = new JwtStrategy(jwtOptions, jwtVerify);
 
-// module.exports = {
-//   jwtStrategy,
-// };
+module.exports = {
+  jwtStrategy
+}
