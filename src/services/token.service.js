@@ -2,7 +2,6 @@ const jwt = require("jsonwebtoken");
 const config = require("../config/config");
 const { tokenTypes } = require("../config/tokens");
 
-
 /**
  * Generate jwt token
  * - Payload must contain fields

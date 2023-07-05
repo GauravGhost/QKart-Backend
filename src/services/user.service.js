@@ -2,7 +2,7 @@ const { User } = require("../models");
 const httpStatus = require("http-status");
 const ApiError = require("../utils/ApiError");
 const bcrypt = require("bcryptjs");
-const {generateAuthTokens} = require('./token.service')
+const { generateAuthTokens } = require('./token.service')
 
 // TODO: CRIO_TASK_MODULE_UNDERSTANDING_BASICS - Implement getUserById(id)
 /**
@@ -12,17 +12,39 @@ const {generateAuthTokens} = require('./token.service')
  * @returns {Promise<User>}
  */
 async function getUserById(id) {
-    try {
-        const user = await User.findById(id);
-        if (!user) {
-            throw new ApiError(httpStatus.BAD_REQUEST, "User not found")
-        }
-        return user;
-    } catch (error) {
-        throw error;
+    const user = await User.findById(id);
+    if (!user) {
+        throw new ApiError(httpStatus.BAD_REQUEST, "User not found")
     }
+
+    return user;
 }
 
+
+async function getUserAddressById(id, q) {
+    const user = await User.findOne({_id:id}, { address: 1, email: 1 });
+    console.log("id ", id, "query ", q);
+    if (q) {
+        console.log("entering the zone")
+        return { address: user.address }
+    }
+    console.log(id, q)
+    return {_id: id, address: user.address, email: user.email};
+}
+
+
+async function setAddress(userId, address) {
+    if (!address) {
+        throw new ApiError(httpStatus.BAD_REQUEST, "Address field is required!");
+    }
+    if (address.length < 20) {
+        throw new ApiError(httpStatus.BAD_REQUEST, "Address shouldn't be less than 20 characters");
+    }
+    const user = await User.findById(userId);
+    user.address = address;
+
+    return user;
+}
 
 
 // TODO: CRIO_TASK_MODULE_UNDERSTANDING_BASICS - Implement getUserByEmail(email)
@@ -32,13 +54,10 @@ async function getUserById(id) {
  * @param {string} email
  * @returns {Promise<User>}
  */
+
 async function getUserByEmail(email) {
-    try {
-        const user = await User.findOne({email});
-        return user;
-    } catch (error) {
-        throw error;
-    }
+    const user = await User.findOne({ email });
+    return user;
 }
 
 
@@ -67,18 +86,20 @@ async function getUserByEmail(email) {
  */
 
 async function createUser(user) {
-        const isExist = await User.isEmailTaken(user.email);
-        if (isExist) {
-            throw new ApiError(httpStatus.OK, "Email already taken");
-        }
-        const newUser = await User.create(user);     
-        return newUser;  
+    const isExist = await User.isEmailTaken(user.email);
+    if (isExist) {
+        throw new ApiError(httpStatus.OK, "Email already taken");
+    }
+    const newUser = await User.create(user);
+    return newUser;
 }
 
 module.exports = {
     getUserByEmail,
     getUserById,
-    createUser
+    createUser,
+    getUserAddressById,
+    setAddress
 }
 
 

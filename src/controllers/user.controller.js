@@ -39,15 +39,38 @@ const { userService } = require("../services");
  *
  */
 const getUser = catchAsync(async (req, res) => {
-  const {userId} = req.params;
-  const user = await userService.getUserById(userId);
-  if(userId != req.user._id){
+  const { userId } = req.params;
+  const { q } = req.query;
+  let user = await userService.getUserById(userId);
+
+  if (userId != req.user._id) {
     throw new ApiError(403, "You are not authorized");
+  }
+
+  if (q) {
+    user = await userService.getUserAddressById(userId, q);
+    console.log(user);
+    return res.status(httpStatus.OK).send(user);
   }
   return res.status(200).send(user);
 });
 
 
+
+/**
+ * @returns {address: String}
+ */
+
+
+const setAddress = catchAsync(async (req, res) => {
+  const {userId} = req.params;
+  const user = await userService.setAddress(userId, req.body.address);
+  return res.status(httpStatus.OK).send(user);
+})
+
+
+
 module.exports = {
   getUser,
+  setAddress
 };

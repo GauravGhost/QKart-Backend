@@ -62,4 +62,48 @@ describe("User test", () => {
     });
   });
 
+  describe("GET user's address", () => {
+    it("should only ask for email and address fields", async () => {
+      const findOneMock = jest.fn();
+      const expectedOutput = {
+        _id: userOne._id,
+        email: userOne.email,
+        address: userOne.address,
+      };
+
+      // NOTE - Mocks model using jest
+      User.findOne = findOneMock.mockReturnValue(expectedOutput);
+
+      const res = await userService.getUserAddressById(userOne._id);
+
+      expect(res).toEqual(expectedOutput);
+
+      expect(findOneMock).toHaveBeenCalled();
+      expect(findOneMock).toHaveBeenCalledWith(
+        {
+          _id: userOne._id,
+        },
+        {
+          email: 1,
+          address: 1,
+        }
+      );
+    });
+  });
+
+  describe("SET user's address", () => {
+    it("should save the address", async () => {
+      const newAddress = "My new awesome address";
+
+      let saveMock = (...args) => {
+        expect(args[0].address).toEqual(newAddress);
+        return args[0];
+      };
+
+      mockingoose(User).toReturn(saveMock, "save");
+
+      const userOneMongooseDoc = new User(userOne);
+      await userService.setAddress(userOneMongooseDoc, newAddress);
+    });
+  });
 });

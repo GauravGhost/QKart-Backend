@@ -25,7 +25,7 @@ const getProductById = catchAsync(async (req, res) => {
   if (!product) {
     throw new ApiError(httpStatus.NOT_FOUND, "Product not found");
   }
-  res.status(httpStatus.OK).send(product);
+  res.send(product);
 });
 
 /**
@@ -58,7 +58,7 @@ const getProductById = catchAsync(async (req, res) => {
  */
 const getProducts = catchAsync(async (req, res) => {
   const products = await productService.getProducts();
-  res.status(httpStatus.OK).send(products);
+  res.send(products);
 });
 
 module.exports = {

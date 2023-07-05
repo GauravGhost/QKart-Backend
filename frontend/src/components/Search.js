@@ -8,7 +8,7 @@ import Cart from "./Cart";
 import Header from "./Header";
 import Product from "./Product";
 import { Row, Col } from "antd";
-import Footer from "./Footer";
+// import Footer from "./Footer";
 import "./Search.css";
 
 /**
@@ -318,7 +318,7 @@ class Search extends React.Component {
         </Row>
 
         {/* Display the footer */}
-        <Footer></Footer>
+        {/* <Footer></Footer> */}
       </>
     );
   }

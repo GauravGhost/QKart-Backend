@@ -20,7 +20,6 @@ app.use(express.json());
 // parse urlencoded request body
 app.use(express.urlencoded({ extended: true }));
 
-
 // gzip compression
 app.use(compression());
 

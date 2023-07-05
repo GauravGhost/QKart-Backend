@@ -3,7 +3,7 @@ import { Button, Input, message } from "antd";
 import React from "react";
 import { withRouter } from "react-router-dom";
 import { config } from "../App";
-import Footer from "./Footer";
+// import Footer from "./Footer";
 import Header from "./Header";
 
 /**
@@ -266,7 +266,7 @@ class Login extends React.Component {
         </div>
 
         {/* Display the footer */}
-        <Footer></Footer>
+        {/* <Footer></Footer> */}
       </>
     );
   }
