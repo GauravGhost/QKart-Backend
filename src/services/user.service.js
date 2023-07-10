@@ -22,14 +22,12 @@ async function getUserById(id) {
 
 
 async function getUserAddressById(id, q) {
-    const user = await User.findOne({_id:id}, { address: 1, email: 1 });
-    console.log("id ", id, "query ", q);
+    const user = await User.findOne({ _id: id }, { address: 1, email: 1 });
     if (q) {
-        console.log("entering the zone")
         return { address: user.address }
     }
-    console.log(id, q)
-    return {_id: id, address: user.address, email: user.email};
+
+    return { _id: id, address: user.address, email: user.email };
 }
 
 

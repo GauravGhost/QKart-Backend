@@ -39,7 +39,7 @@ const generateToken = (userId, expires, type, secret = config.jwt.secret) => {
  *
  * Example response:
  * "access": {
- *          "token": "eyJhbGciOiJIUzI1NiIs...",
+ *          "token": "eyJhbGciOiJIUzI1 NiIs...",
  *          "expires": "2021-01-30T13:51:19.036Z"
  * }
  */

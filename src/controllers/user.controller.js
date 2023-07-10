@@ -49,7 +49,6 @@ const getUser = catchAsync(async (req, res) => {
 
   if (q) {
     user = await userService.getUserAddressById(userId, q);
-    console.log(user);
     return res.status(httpStatus.OK).send(user);
   }
   return res.status(200).send(user);

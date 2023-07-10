@@ -74,6 +74,10 @@ userSchema.methods.isPasswordMatch = async function (password){
   return bcrypt.compare(password, this.password);
 }
 
+userSchema.methods.hasSetNonDefaultAddress = async function(){
+  return this.address !== config.default_address;
+}
+
 // TODO: CRIO_TASK_MODULE_UNDERSTANDING_BASICS
 const User = mongoose.model('User', userSchema);
 /*
