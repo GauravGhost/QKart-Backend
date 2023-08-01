@@ -3,12 +3,6 @@ const config = require("../config/config");
 const { tokenTypes } = require("../config/tokens");
 
 /**
- * Generate jwt token
- * - Payload must contain fields
- * --- "sub": `userId` parameter
- * --- "type": `type` parameter
- *
- * - Token expiration must be set to the value of `expires` parameter
  *
  * @param {ObjectId} userId - Mongo user id
  * @param {Number} expires - Token expiration time in seconds since unix epoch
@@ -29,10 +23,6 @@ const generateToken = (userId, expires, type, secret = config.jwt.secret) => {
 };
 
 /**
- * Generate auth token
- * - Generate jwt token
- * - Token type should be "ACCESS"
- * - Return token and expiry date in required format
  *
  * @param {User} user
  * @returns {Promise<Object>}

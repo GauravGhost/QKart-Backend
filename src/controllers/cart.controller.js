@@ -3,8 +3,6 @@ const catchAsync = require("../utils/catchAsync");
 const { cartService } = require("../services");
 
 /**
- * Fetch the cart details
- *
  * Example response:
  * HTTP 200 OK
  * {
@@ -36,9 +34,9 @@ const getCart = catchAsync(async (req, res) => {
   res.send(cart);
 });
 
+
 /**
  * Add a product to cart
- *
  *
  */
 const addProductToCart = catchAsync(async (req, res) => {
@@ -51,15 +49,7 @@ const addProductToCart = catchAsync(async (req, res) => {
   res.status(httpStatus.CREATED).send(cart);
 });
 
-// TODO: CRIO_TASK_MODULE_CART - Implement updateProductInCart()
 /**
- * Update product quantity in cart
- * - If updated quantity > 0, 
- * --- update product quantity in user's cart
- * --- return "200 OK" and the updated cart object
- * - If updated quantity == 0, 
- * --- delete the product from user's cart
- * --- return "204 NO CONTENT"
  * 
  * Example responses:
  * HTTP 200 - on successful update
